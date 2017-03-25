@@ -1,4 +1,4 @@
-module EmailAddress
+module EmailAddr
   # Global configurations and for default/unknown providers. Settings are:
   #
   # * dns_lookup:         :mx, :a, :off

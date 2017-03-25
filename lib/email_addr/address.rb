@@ -1,19 +1,19 @@
 require 'digest/sha1'
 require 'digest/md5'
 
-module EmailAddress
+module EmailAddr
   # Implements the Email Address container, which hold the Local
-  # (EmailAddress::Local) and Host (Email::AddressHost) parts.
+  # (EmailAddr::Local) and Host (Email::AddressHost) parts.
   class Address
     include Comparable
     attr_accessor :original, :local, :host, :config, :reason
 
-    CONVENTIONAL_REGEX = /\A#{::EmailAddress::Local::CONVENTIONAL_MAILBOX_WITHIN}
-                           @#{::EmailAddress::Host::DNS_HOST_REGEX}\z/x
-    STANDARD_REGEX     = /\A#{::EmailAddress::Local::STANDARD_LOCAL_WITHIN}
-                           @#{::EmailAddress::Host::DNS_HOST_REGEX}\z/x
-    RELAXED_REGEX      = /\A#{::EmailAddress::Local::RELAXED_MAILBOX_WITHIN}
-                           @#{::EmailAddress::Host::DNS_HOST_REGEX}\z/x
+    CONVENTIONAL_REGEX = /\A#{::EmailAddr::Local::CONVENTIONAL_MAILBOX_WITHIN}
+                           @#{::EmailAddr::Host::DNS_HOST_REGEX}\z/x
+    STANDARD_REGEX     = /\A#{::EmailAddr::Local::STANDARD_LOCAL_WITHIN}
+                           @#{::EmailAddr::Host::DNS_HOST_REGEX}\z/x
+    RELAXED_REGEX      = /\A#{::EmailAddr::Local::RELAXED_MAILBOX_WITHIN}
+                           @#{::EmailAddr::Host::DNS_HOST_REGEX}\z/x
 
     # Given an email address of the form "local@hostname", this sets up the
     # instance, and initializes the address to the "normalized" format of the
@@ -27,9 +27,9 @@ module EmailAddress
       else
         (local, host)    = [email_address, '']
       end
-      @host         = EmailAddress::Host.new(host, config)
+      @host         = EmailAddr::Host.new(host, config)
       @config       = @host.config
-      @local        = EmailAddress::Local.new(local, @config, @host)
+      @local        = EmailAddr::Local.new(local, @config, @host)
     end
 
     ############################################################################
@@ -103,7 +103,7 @@ module EmailAddress
     alias :to_s :normal
 
     def inspect
-      "#<EmailAddress::Address:0x#{self.object_id.to_s(16)} address=\"#{self.to_s}\">"
+      "#<EmailAddr::Address:0x#{self.object_id.to_s(16)} address=\"#{self.to_s}\">"
     end
 
     # Returns the canonical email address according to the provider
@@ -174,7 +174,7 @@ module EmailAddress
     # of this addres with another, using the canonical or redacted forms.
     def same_as?(other_email)
       if other_email.is_a?(String)
-        other_email = EmailAddress::Address.new(other_email)
+        other_email = EmailAddr::Address.new(other_email)
       end
 
       self.canonical   == other_email.canonical ||
@@ -263,7 +263,7 @@ module EmailAddress
     end
 
     def set_error(err, reason=nil)
-      @error = EmailAddress::Config.error_messages.fetch(err) { err }
+      @error = EmailAddr::Config.error_messages.fetch(err) { err }
       @reason= reason
       false
     end

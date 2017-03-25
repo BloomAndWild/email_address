@@ -14,5 +14,5 @@ end
 
 desc "Open and IRB Console with the gem loaded"
 task :console do
-  sh "bundle exec irb  -Ilib -I . -r active_record -r email_address"
+  sh "bundle exec irb  -Ilib -I . -r active_record -r email_addr"
 end

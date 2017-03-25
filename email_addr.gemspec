@@ -1,14 +1,14 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'email_address/version'
+require 'email_addr/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "email_address"
-  spec.version       = EmailAddress::VERSION
+  spec.name          = "email_addr"
+  spec.version       = EmailAddr::VERSION
   spec.authors       = ["Allen Fair"]
   spec.email         = ["allen.fair@gmail.com"]
-  spec.description   = %q{The EmailAddress Gem to work with and validate email addresses.}
+  spec.description   = %q{The EmailAddr Gem to work with and validate email addresses.}
   spec.summary       = %q{This gem provides a ruby language library for working with and validating email addresses. By default, it validates against conventional usage, the format preferred for user email addresses. It can be configured to validate against RFC “Standard” formats, common email service provider formats, and perform DNS validation.}
   spec.homepage      = "https://github.com/afair/email_address"
   spec.license       = "MIT"

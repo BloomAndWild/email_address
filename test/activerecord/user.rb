@@ -6,7 +6,7 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 end
 
-dbfile = ENV['EMAIL_ADDRESS_TEST_DB'] || "/tmp/email_address.gem.db"
+dbfile = ENV['EMAIL_ADDRESS_TEST_DB'] || "/tmp/email_addr.gem.db"
 File.unlink(dbfile) if File.exist?(dbfile)
 
 # Connection: JRuby vs. MRI
@@ -32,9 +32,9 @@ ApplicationRecord.connection.execute(
   "create table users ( email varchar, canonical_email varchar)")
 
 if defined?(ActiveRecord) && ::ActiveRecord::VERSION::MAJOR >= 5
-  ActiveRecord::Type.register(:email_address, EmailAddress::EmailAddressType)
+  ActiveRecord::Type.register(:email_address, EmailAddr::EmailAddrType)
   ActiveRecord::Type.register(:canonical_email_address,
-                              EmailAddress::CanonicalEmailAddressType)
+                              EmailAddr::CanonicalEmailAddrType)
 end
 
 ################################################################################
@@ -48,7 +48,7 @@ class User < ApplicationRecord
     attribute :canonical_email, :canonical_email_address
   end
 
-  validates_with EmailAddress::ActiveRecordValidator,
+  validates_with EmailAddr::ActiveRecordValidator,
     fields: %i(email canonical_email)
 
   def email=(email_address)
@@ -57,14 +57,14 @@ class User < ApplicationRecord
   end
 
   def self.find_by_email(email)
-    user   = self.find_by(email: EmailAddress.normal(email))
-    user ||= self.find_by(canonical_email: EmailAddress.canonical(email))
-    user ||= self.find_by(canonical_email: EmailAddress.redacted(email))
+    user   = self.find_by(email: EmailAddr.normal(email))
+    user ||= self.find_by(canonical_email: EmailAddr.canonical(email))
+    user ||= self.find_by(canonical_email: EmailAddr.redacted(email))
     user
   end
 
   def redact!
-    self[:canonical_email] = EmailAddress.redact(self.canonical_email)
+    self[:canonical_email] = EmailAddr.redact(self.canonical_email)
     self[:email]           = self[:canonical_email]
   end
 

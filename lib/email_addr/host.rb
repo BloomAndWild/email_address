@@ -3,9 +3,9 @@ require 'resolv'
 require 'netaddr'
 require 'net/smtp'
 
-module EmailAddress
+module EmailAddr
   ##############################################################################
-  # The EmailAddress Host is found on the right-hand side of the "@" symbol.
+  # The EmailAddr Host is found on the right-hand side of the "@" symbol.
   # It can be:
   # * Host name (domain name with optional subdomain)
   # * International Domain Name, in Unicode (Display) or Punycode (DNS) format
@@ -209,7 +209,7 @@ module EmailAddress
     def find_provider # :nodoc:
       return self.provider if self.provider
 
-      EmailAddress::Config.providers.each do |provider, config|
+      EmailAddr::Config.providers.each do |provider, config|
         if config[:host_match] && self.matches?(config[:host_match])
           return self.set_provider(provider, config)
         end
@@ -220,14 +220,14 @@ module EmailAddress
       provider = self.exchangers.provider
       if provider != :default
         self.set_provider(provider,
-          EmailAddress::Config.provider(provider))
+          EmailAddr::Config.provider(provider))
       end
 
       self.provider ||= self.set_provider(:default)
     end
 
     def set_provider(name, provider_config={}) # :nodoc:
-      self.config = EmailAddress::Config.all_settings(provider_config, @config)
+      self.config = EmailAddr::Config.all_settings(provider_config, @config)
       self.provider = name
     end
 
@@ -329,7 +329,12 @@ module EmailAddress
 
     # True if the :dns_lookup setting is enabled
     def dns_enabled?
-      [:mx, :a].include?(EmailAddress::Config.setting(:host_validation))
+      [:mx, :a].include?(EmailAddr::Config.setting(:host_validation))
+    end
+
+    # True if the host name has a DNS A Record
+    def has_dns_a_record?
+      dns_a_record.size > 0 ? true : false
     end
 
     # Returns: [official_hostname, alias_hostnames, address_family, *address_list]
@@ -339,11 +344,11 @@ module EmailAddress
       @_dns_a_record ||= []
     end
 
-    # Returns an array of EmailAddress::Exchanger hosts configured in DNS.
+    # Returns an array of EmailAddr::Exchanger hosts configured in DNS.
     # The array will be empty if none are configured.
     def exchangers
       return nil if @config[:host_type] != :email || !self.dns_enabled?
-      @_exchangers ||= EmailAddress::Exchanger.cached(self.dns_name)
+      @_exchangers ||= EmailAddr::Exchanger.cached(self.dns_name)
     end
 
     # Returns a DNS TXT Record
@@ -486,7 +491,7 @@ module EmailAddress
     end
 
     def set_error(err, reason=nil)
-      @error_message = EmailAddress::Config.error_messages.fetch(err) { err }
+      @error_message = EmailAddr::Config.error_messages.fetch(err) { err }
       @reason        = reason
       false
     end

@@ -1,6 +1,6 @@
-module EmailAddress
+module EmailAddr
   ##############################################################################
-  # EmailAddress Local part consists of
+  # EmailAddr Local part consists of
   # - comments
   # - mailbox
   # - tag
@@ -100,7 +100,7 @@ module EmailAddress
     REDACTED_REGEX = /\A \{ [0-9a-f]{40} \} \z/x # {sha1}
 
     def initialize(local, config={}, host=nil)
-      self.config   = config.empty? ? EmailAddress::Config.all_settings : config
+      self.config   = config.empty? ? EmailAddr::Config.all_settings : config
       self.local    = local
       @host         = host
     end
