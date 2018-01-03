@@ -394,6 +394,8 @@ module EmailAddr
         false
       elsif dns_lookup == :connect
         valid_mx? && connect
+      elsif dns_lookup == :mx_or_a
+        valid_mx? || valid_dns?
       elsif dns_lookup == :mx
         valid_mx?
       elsif dns_lookup == :a
