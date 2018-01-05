@@ -329,7 +329,7 @@ module EmailAddr
 
     # True if the :dns_lookup setting is enabled
     def dns_enabled?
-      [:mx, :a].include?(EmailAddr::Config.setting(:host_validation))
+      [:mx, :a, :mx_or_a].include?(EmailAddr::Config.setting(:host_validation))
     end
 
     # True if the host name has a DNS A Record
@@ -385,7 +385,7 @@ module EmailAddr
 
     # Returns true if the host name is valid according to the current configuration
     def valid?(rules={})
-      host_validation = rules[:host_validation] || @config[:host_validation] || :mxG
+      host_validation = rules[:host_validation] || @config[:host_validation] || :mx
       dns_lookup      = rules[:dns_lookup] || host_validation
       self.error_message = nil
       if self.ip_address
